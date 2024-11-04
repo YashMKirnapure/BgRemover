@@ -1,4 +1,5 @@
-import { Webhook } from "svix"
+import { Webhook } from "svix";
+import userModel from '../models/userModel.js';
 
 // API Controller function to manage clerk user with database
 // http://localhost:4000/api/user/webhooks
@@ -29,9 +30,19 @@ const clerkWebhooks = async (req,res) =>
                 break;
             }
             case "user.updated":{
+                const userData = {
+                    email: data.email_addresses[0].email_address,
+                    firstName: data.first_name,
+                    lastName: data.last_name,
+                    photo: data.image_url
+                }
+                await userModel.findOneAndUpdate({clerkId:data.id},userData)
+                res.json({});
                 break;
             }     
             case "user.deleted":{
+                await userModel.findOneAndDelete({clerkId:data.id})
+                res.json({});
                 break;
             }     
             default:
@@ -43,3 +54,5 @@ const clerkWebhooks = async (req,res) =>
         res.json({success:false,message:error.message});
     }
 }
+
+export {clerkWebhooks};
