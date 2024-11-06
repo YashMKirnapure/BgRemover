@@ -77,6 +77,8 @@ const AppContextProvider = (props) => {
     image,
     setImage,
     removeBg,
+    resultImage,
+    setResultImage,
   };
   return (
     <AppContext.Provider value={value}>{props.children}</AppContext.Provider>
